@@ -1,5 +1,4 @@
 import requests
-import html2text
 from bs4 import BeautifulSoup
 import re
 from typing import List, Dict, Optional

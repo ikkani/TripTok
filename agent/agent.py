@@ -6,7 +6,7 @@ import requests
 import pprint 
 
 # Tools #
-from agent_tools import search_tool, download_relevant_content
+from agent.agent_tools import search_tool, download_relevant_content
 
 # Definimos el modelo y el estado
 llm = ChatOpenAI(
@@ -114,14 +114,7 @@ graph.add_edge("web_summary", END)
 app = graph.compile()
 
 if __name__ == "__main__":
-    # example = {
-    #     "text": "Título: El mejor ramen de Tokyo\nDescripción: Un lugar imperdible en Shibuya\nTranscripción: Este ramen en Ichiran es increíble, queda cerca del cruce de Shibuya."
-    # }
-    # result = app.invoke(example)
-    # print(result["summaries"])
 
-    # Otro ejemplo cogido de data y transcripts
-    # Cargamos el JSON de ejemplo
     import json
     description_path = "./data/tiktok_data_20250913_005000.json"
     with open(description_path, "r", encoding="utf-8") as f:

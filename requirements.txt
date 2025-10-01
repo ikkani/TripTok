@@ -1,0 +1,9 @@
+selenium==3.141.0
+urllib3==1.26.16
+openai-whisper
+yt-dlp
+requests
+langgraph
+langchain_openai
+beautifulsoup4
+pandas
