@@ -32,6 +32,15 @@ pip install -r requirements.txt
 
 ---
 
+## Stack utilizado
+
+ - [Selenium](https://pypi.org/project/selenium/) para el scraper de videos.
+ - [Whisper de OpenAI](https://github.com/openai/whisper) para las transcripciones.
+ - [SearXNG](https://github.com/searxng/searxng) como motor de búsqueda web.
+ - [Llama.cpp](https://github.com/ggml-org/llama.cpp) para montar un LLM local (Qwen3 4B 2507) sobre el que construir el agente. 
+
+
+
 ## Estructura del proyecto
 
 ```
@@ -69,7 +78,7 @@ C://chromedriver-win64//chromedriver.exe
 
 ## Uso
 
-Ejecuta el script principal con el parámetro `--first-step` para indicar desde qué paso empezar.
+Ejecuta el script principal con el parámetro `--first-step` para indicar desde qué paso empezar. Si no indicamos nada, se ejecutará el flujo al completo.
 
 ### 1. Scrappear URLs de una colección
 
