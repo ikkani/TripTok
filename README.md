@@ -1,12 +1,16 @@
 **TripTok** es un proyecto en Python que:
 
 1️⃣ Localiza y descarga todos los vídeos y su información (título, descripción, etc.).
+
 2️⃣ Transcribiese el audio de cada video.
+
 3️⃣ Mediante un agente:
+
 	- Detecta las entidades de las que se habla en cada video.
 	- Resume qué se dice de cada entidad.
 	- Busca información adicional en internet.
 	- Genera un resumen extra extendido con la información de internet.
+
 4️⃣ Vuelca toda la información en un csv legible, claro y ordenado.
 
 > ⚠️ **Aviso legal**: El scraping y descarga de contenido de TikTok puede violar sus Términos de Servicio y/o derechos de autor. Usa este proyecto solo con fines de investigación o educativos y bajo tu propia responsabilidad.
