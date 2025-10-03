@@ -1,30 +1,34 @@
-**TripTok** es un proyecto en Python que:
+# TripTok
 
-1️⃣ Localiza y descarga todos los vídeos y su información (título, descripción, etc.).
+[(Versión en español)](https://github.com/ikkani/TripTok/blob/main/README-es.md)
 
-2️⃣ Transcribiese el audio de cada video.
+**TripTok** is a Python project that:
 
-3️⃣ Mediante un agente:
+1️⃣ Locates and downloads all videos and their information (title, description, etc.).
 
-	- Detecta las entidades de las que se habla en cada video.
-	- Resume qué se dice de cada entidad.
-	- Busca información adicional en internet.
-	- Genera un resumen extra extendido con la información de internet.
+2️⃣ Transcribes the audio of each video.
 
-4️⃣ Vuelca toda la información en un csv legible, claro y ordenado.
+3️⃣ Uses an agent to:
 
-> ⚠️ **Aviso legal**: El scraping y descarga de contenido de TikTok puede violar sus Términos de Servicio y/o derechos de autor. Usa este proyecto solo con fines de investigación o educativos y bajo tu propia responsabilidad.
+   - Detect the entities mentioned in each video.
+   - Summarize what is said about each entity.
+   - Search for additional information on the internet.
+   - Generate an extended summary using that external information.
+
+4️⃣ Outputs all the information into a clear, readable, and organized CSV file.
+
+> ⚠️ **Legal notice**: Scraping and downloading TikTok content may violate its Terms of Service and/or copyright laws. Use this project for research or educational purposes only, and at your own risk.
 
 ---
 
-## Requisitos
+## Requirements
 
-* Python 3.9.
-* Google Chrome instalado
-* [ChromeDriver](https://chromedriver.chromium.org/) compatible con tu versión de Chrome
-* GPU dedicada capaz de ejecutar LLMs pequeños y OpenAI Whisper.
+* Python 3.9
+* Google Chrome installed
+* [ChromeDriver](https://chromedriver.chromium.org/) compatible with your Chrome version
+* Dedicated GPU capable of running small LLMs and OpenAI Whisper
 
-Instala dependencias:
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -32,105 +36,103 @@ pip install -r requirements.txt
 
 ---
 
-## Stack utilizado
+## Tech Stack
 
- - [Selenium](https://pypi.org/project/selenium/) para el scraper de videos.
- - [Whisper de OpenAI](https://github.com/openai/whisper) para las transcripciones.
- - [SearXNG](https://github.com/searxng/searxng) como motor de búsqueda web.
- - [Llama.cpp](https://github.com/ggml-org/llama.cpp) para montar un LLM local (Qwen3 4B 2507) sobre el que construir el agente. 
+ - [Selenium](https://pypi.org/project/selenium/) for scraping TikTok videos.
+ - [OpenAI Whisper](https://github.com/openai/whisper) for audio transcription.
+ - [SearXNG](https://github.com/searxng/searxng) as a web search engine.
+ - [Llama.cpp](https://github.com/ggml-org/llama.cpp) to run a local LLM (Qwen3 4B 2507) used by the agent.
 
-
-
-## Estructura del proyecto
+## Project Structure
 
 ```
 TripTok/
-├── agent/               # Agente LLM (LangGraph + LangChain)
-├── audio_to_text/       # Conversión de audio a texto con Whisper
-├── tiktok_scraping/     # Scrapers para colecciones y videos
-├── data/                # Metadatos guardados
-├── downloads/           # Videos descargados
-├── transcripts/         # Transcripciones
-├── results/             # Resultados combinados
-├── main.py              # Script de entrada principal
+├── agent/               # LLM Agent (LangGraph + LangChain)
+├── audio_to_text/       # Audio-to-text with Whisper
+├── tiktok_scraping/     # Scrapers for collections and videos
+├── data/                # Saved metadata
+├── downloads/           # Downloaded videos
+├── transcripts/         # Transcriptions
+├── results/             # Combined results
+├── main.py              # Main entry script
 └── requirements.txt
 ```
 
 ---
 
-## Configuración inicial
+## Initial Setup
 
 ### 1. ChromeDriver
 
-Por defecto, el código espera `chromedriver` en:
+By default, the code expects `chromedriver` at:
 
 ```
 C://chromedriver-win64//chromedriver.exe
 ```
 
-### 2. Servicios locales requeridos (para el agente)
+### 2. Required Local Services (for the agent)
 
-* **LLM**: el agente usa `http://127.0.0.1:1234/v1` como endpoint. Debes tener un modelo LLM local corriendo con una API compatible con el modelo de OpenAI (ej. [Ollama](https://ollama.ai), [LM Studio](https://lmstudio.ai) o [llama.cpp](https://github.com/ggml-org/llama.cpp)).
-* **Buscador web**: se espera un servicio SearXNG en `http://localhost:8080/search` que devuelva resultados en JSON. Si no lo tienes, desactiva la parte del agente o implementa un stub.
-* **Prompts**: el agente carga prompts desde `./prompts/*.txt` (`ner_prompt.txt`, `video_summarize_prompt.txt`)
+* **LLM**: the agent uses `http://127.0.0.1:1234/v1` as an endpoint. You must have a local LLM running with an API compatible with OpenAI (e.g., [Ollama](https://ollama.ai), [LM Studio](https://lmstudio.ai), or [llama.cpp](https://github.com/ggml-org/llama.cpp)).
+* **Web Search**: a [SearXNG](https://github.com/searxng/searxng) instance is expected at `http://localhost:8080/search` returning JSON results. If unavailable, disable the agent or implement a stub.
+* **Prompts**: the agent loads prompts from `./prompts/*.txt` (`ner_prompt.txt`, `video_summarize_prompt.txt`).
 
 ---
 
-## Uso
+## Usage
 
-Ejecuta el script principal con el parámetro `--first-step` para indicar desde qué paso empezar. Si no indicamos nada, se ejecutará el flujo al completo.
+Run the main script with the parameter `--first-step` to specify from which step to start. If omitted, the full pipeline will run.
 
-### 1. Scrappear URLs de una colección
+### 1. Scrape URLs from a TikTok collection
 
 ```bash
 python main.py --first-step download-url
 ```
 
-Esto abrirá el navegador, cargará la colección indicada en `COLLECTION_URL` y guardará las URLs en `tiktok_urls.json`.
+This will open a browser, load the collection set in `COLLECTION_URL`, and save the URLs to `tiktok_urls.json`.
 
-### 2. Descargar videos y metadatos
+### 2. Download videos and metadata
 
 ```bash
 python main.py --first-step download-videos
 ```
 
-Se procesarán las URLs de `tiktok_urls.json` y se guardarán videos en `./downloads` y datos en `./data`.
+This will process the URLs in `tiktok_urls.json` and save videos to `./downloads` and metadata to `./data`.
 
-### 3. Transcribir videos
+### 3. Transcribe videos
 
 ```bash
 python main.py --first-step transcript
 ```
 
-Se generarán archivos `.txt` en `./transcripts`.
+This will generate `.txt` transcription files in `./transcripts`.
 
-### 4. Ejecutar el agente
+### 4. Run the agent
 
 ```bash
 python main.py --first-step agent
 ```
 
-Esto procesa las descripciones + transcripciones con el agente LLM.
+This processes video descriptions + transcripts with the LLM agent.
 
-### 5. Limpieza / combinación de resultados
+### 5. Clean / merge results
 
 ```bash
 python main.py --first-step data-cleaning
 ```
 
-Se combinan y limpian los resultados en un CSV final en `./results`.
+This combines and cleans results into a final CSV in `./results`.
 
 ---
 
 ## ToDo's
 
-* Parametrizar la ruta del ChromeDriver automáticamente.
-* Añadir manejo de errores/captchas en los scrapers.
-* Robustecer el scraper en caso de cambio del DOM de TikTok.
-* Pulir y mejorar el agente.
+* Parameterize ChromeDriver path automatically.
+* Add error/captcha handling in scrapers.
+* Make the scraper more robust against TikTok DOM changes.
+* Improve and refine the agent.
 
 ---
 
-## Créditos
+## Credits
 
-Proyecto creado por [ikkani](https://github.com/ikkani).
+Project created by [ikkani](https://github.com/ikkani).
